@@ -656,5 +656,35 @@ const products = [
       "apparel",
       "mens"
     ]
+  },
+  {
+    id: "id1",
+    image: "images/products/umbrella.jpg",
+    name: "Fully Automatic Foldable Umbrella - Dark Green",
+    rating: {
+      stars: 5,
+      count: 2100
+    },
+    priceCents: 4000,
+    keywords: [
+      "umbrella",
+      "foldable",
+      "personal",
+    ]
+  }, {
+    id: "id2",
+    image: "images/products/backpack.jpg",
+    name: "Classic School Backpack - Black",
+    rating: {
+      stars: 4.5,
+      count: 7111
+    },
+    priceCents: 1902,
+    keywords: [
+      "backpack",
+      "school",
+      "travel",
+      "bag"
+    ]
   }
 ];
