@@ -1,6 +1,12 @@
-import { cart, removeFromCart } from '../data/cart.js';
+import { calculateCartQuantity, cart, removeFromCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+
+function setCartQuantity() {
+  document.querySelector('.js-cart-quantity').innerHTML = `${calculateCartQuantity()} items`;
+}
+
+setCartQuantity();
 
 let cartSummaryHTML = '';
 
@@ -110,6 +116,7 @@ document.querySelectorAll('.js-delete-link')
       );
 
       container.remove();
-      
+
+      setCartQuantity();
     })
   });
