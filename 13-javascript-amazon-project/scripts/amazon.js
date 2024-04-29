@@ -1,3 +1,7 @@
+import { cart, addToCart } from '../data/cart.js';
+import { products } from '../data/products.js';
+import { formatCurrency } from './utils/money.js';
+
 let productsHTML = '';
 
 products.forEach((product) => {
@@ -22,11 +26,11 @@ products.forEach((product) => {
           </div>
 
           <div class="product-price">
-            $${(product.priceCents / 100).toFixed(2)}
+            $${formatCurrency(product.priceCents)}
           </div>
 
           <div class="product-quantity-container">
-            <select class="js-quantity-selector-${product.id}">
+            <select>
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -42,7 +46,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart js-added-to-cart-${product.id}">
+          <div class="added-to-cart">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -59,43 +63,12 @@ products.forEach((product) => {
 document.querySelector('.js-products-grid').
   innerHTML = productsHTML;
 
-let dropdownSelectElement;
-let selectedQuantity;
-let addedMessageElement;
-let timeoutId;
+function updateCartQuantity() {
+  let cartQuantity = 0;
 
-function notifyAddtoCart(productId) {
-  addedMessageElement = document.querySelector(`.js-added-to-cart-${productId}`);
-
-  addedMessageElement.classList.add('added-message');
-
-  clearTimeout(timeoutId);
-
-  timeoutId = setTimeout(() => {
-    addedMessageElement.classList.remove('added-message')
-  }, 2000)
-}
-
-function upsertItemToCart(productId) {
-  const matchingItem = cart.find((item) => productId === item.productId);
-
-  dropdownSelectElement = document.querySelector
-    (`.js-quantity-selector-${productId}`)
-
-  selectedQuantity = Number(dropdownSelectElement.value);
-
-  if (matchingItem) {
-    matchingItem.quantity += selectedQuantity;
-  } else {
-    cart.push({
-      productId,
-      quantity: selectedQuantity
-    });
-  }
-
-  const cartQuantity = cart.reduce((total, item) => {
-    return total + item.quantity
-  }, 0);
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
 
   document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
 }
@@ -103,11 +76,8 @@ function upsertItemToCart(productId) {
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
-      const { productId } = button.dataset; //gets the product ID
-
-      upsertItemToCart(productId);
-      notifyAddtoCart(productId);
+      const productId = button.dataset.productId;
+      addToCart(productId);
+      updateCartQuantity();
     });
   });
-
-
